@@ -52,12 +52,12 @@ Generate access and refresh tokens for an organizer.
 curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"organizer_id": 123}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/token
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/token
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `POST`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/auth/token`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/auth/token`
 - **Headers:**
   - `Content-Type: application/json`
 - **Body (raw JSON):**
@@ -114,12 +114,12 @@ Refresh an expired access token using a refresh token.
 curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"refresh_token": "f6e5d4c3b2a1..."}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/refresh
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/refresh
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `POST`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/auth/refresh`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/auth/refresh`
 - **Headers:**
   - `Content-Type: application/json`
 - **Body (raw JSON):**
@@ -182,7 +182,7 @@ Get encrypted organizer ID for use in API requests.
 curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"organizer_id": 123}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/organizer-id
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/organizer-id
 ```
 
 **Option 2 - Using access token:**
@@ -191,7 +191,7 @@ curl -X POST \
      -H "Content-Type: application/json" \
      -H "X-API-TOKEN: your_access_token" \
      -d '{}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/organizer-id
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/organizer-id
 ```
 
 **Error Responses:**
@@ -245,12 +245,12 @@ curl -X POST \
      -d '{
        "encrypted_data": "y4ZjKtZofHvEbYSXb/vMaG1KSFVQTWQyMXM1blpWVWFMSlhJUEFkcEJYemVkNEhSZEhEQUUzMDdDeDdldmZNVS9EVVlETnFuVmVMRnlMY3V3YU5tUGxHQ1RDUTVjVGwvYjZyL1Y2QnZHWWlWVDRyenhHeHFXMG9GdXFiZVZLQXVNeEhOT1MrelhwMWduRlk5MmJIKzhxcmdKblFPVnpFSk1ZQzQxYWdZbTZXaU1kbVFmK2Y2QmlNZ0JydjhFQXpzanRJaGVLd2RNcXEzQVZTUW5sOStVRXhkdGpCWjF5dkJPeWNLd2pWdjRHdmRwMkdwWjladWRsT2Yyem9lWkhpaG5PdWRXbzFxR3g3SjhZc09QSUpDNk9qNk9lbWREdmREYnlkTXdiSDQxK3hmc2QwWldQLzR4em1MZStybDNQSWx0QWpRUFNQWXBZc20yWEY4S0NLSU4rYWtyMmJpa2x1TVcySEExZz09"
      }' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/decrypt
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/decrypt
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `POST`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/auth/decrypt`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/auth/decrypt`
 - **Headers:**
   - `Content-Type: application/json`
 - **Body (raw JSON):**
@@ -278,7 +278,7 @@ Complete workflow example showing how to use the authentication APIs.
 curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"organizer_id": 123}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/token
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/token
 
 # Response:
 # {
@@ -301,7 +301,7 @@ URL_SAFE_ORGANIZER_ID="WmQYYFynQagwx5WWk544B2lBeUdVd21tWDBSMVFoZjdxMElRKzM1MHl6c
 
 # Make API call with both token and organizer ID in URL
 curl -H "X-API-TOKEN: $ACCESS_TOKEN" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/$URL_SAFE_ORGANIZER_ID/events"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/$URL_SAFE_ORGANIZER_ID/events"
 ```
 
 ### Step 3: Refresh Token When Expired
@@ -313,7 +313,7 @@ REFRESH_TOKEN="f6e5d4c3b2a1..."
 curl -X POST \
      -H "Content-Type: application/json" \
      -d "{\"refresh_token\": \"$REFRESH_TOKEN\"}" \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/refresh
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/refresh
 
 # Response contains new access_token and refresh_token
 ```
@@ -326,13 +326,13 @@ curl -X POST \
      -H "Content-Type: application/json" \
      -H "X-API-TOKEN: $ACCESS_TOKEN" \
      -d '{}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/organizer-id
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/organizer-id
 
 # Or with direct organizer_id
 curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"organizer_id": 123}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/organizer-id
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/organizer-id
 ```
 
 ---
@@ -343,7 +343,7 @@ curl -X POST \
 #!/bin/bash
 
 # Configuration
-API_BASE="http://localhost/tikiti-organizer-api/public/api/v1"
+API_BASE="https://tikiti-organizer-api.videostech.cloud/api/v1"
 ORGANIZER_ID=123
 
 # Step 1: Generate Token

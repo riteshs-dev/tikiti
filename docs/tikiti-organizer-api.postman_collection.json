@@ -1,0 +1,911 @@
+{
+	"info": {
+		"_postman_id": "tikiti-organizer-api-collection",
+		"name": "Tikiti Organizer API",
+		"description": "Complete API collection for Tikiti Organizer API with authentication, organizers, events, and health check endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "tikiti-organizer-api"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Check API health status. No authentication required."
+					},
+					"response": []
+				}
+			],
+			"description": "Health check endpoints"
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Generate Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.environment.set(\"access_token\", response.data.access_token);",
+									"        pm.environment.set(\"refresh_token\", response.data.refresh_token);",
+									"        pm.environment.set(\"encrypted_organizer_id\", response.data.encrypted_organizer_id);",
+									"        pm.environment.set(\"url_safe_organizer_id\", response.data.url_safe_organizer_id);",
+									"        pm.environment.set(\"token_expires_at\", response.data.expires_at);",
+									"        console.log(\"Tokens saved to environment\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"organizer_id\": {{organizer_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/auth/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"auth",
+								"token"
+							]
+						},
+						"description": "Generate access and refresh tokens for an organizer. Returns encrypted organizer ID and URL-safe organizer ID for use in subsequent requests."
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.environment.set(\"access_token\", response.data.access_token);",
+									"        pm.environment.set(\"refresh_token\", response.data.refresh_token);",
+									"        pm.environment.set(\"token_expires_at\", response.data.expires_at);",
+									"        console.log(\"Tokens refreshed and saved\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/auth/refresh",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"auth",
+								"refresh"
+							]
+						},
+						"description": "Refresh an expired access token using a refresh token. Returns new access and refresh tokens."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Encrypted Organizer ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.environment.set(\"encrypted_organizer_id\", response.data.encrypted_organizer_id);",
+									"        pm.environment.set(\"url_safe_organizer_id\", response.data.url_safe_organizer_id);",
+									"        console.log(\"Organizer IDs saved\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{access_token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"organizer_id\": {{organizer_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/auth/organizer-id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"auth",
+								"organizer-id"
+							]
+						},
+						"description": "Get encrypted organizer ID for use in API requests. Can be called with organizer_id in body or with access_token in header."
+					},
+					"response": []
+				},
+				{
+					"name": "Decrypt Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"encrypted_data\": \"your_encrypted_string_here\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/auth/decrypt",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"auth",
+								"decrypt"
+							]
+						},
+						"description": "Decrypt encrypted data. Returns unencrypted data directly (not re-encrypted). Useful for debugging encrypted responses."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for token generation, refresh, and organizer ID encryption"
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Get All Events",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{url_safe_organizer_id}}/events?page={{page}}&per_page={{per_page}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{url_safe_organizer_id}}",
+								"events"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}",
+									"description": "Page number (default: 1)"
+								},
+								{
+									"key": "per_page",
+									"value": "{{per_page}}",
+									"description": "Items per page (default: 20)"
+								},
+								{
+									"key": "status",
+									"value": "active",
+									"description": "Filter by status (active, live, draft, cancelled)",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search in name, description, or short_description",
+									"disabled": true
+								},
+								{
+									"key": "upcoming",
+									"value": "true",
+									"description": "Get only upcoming events",
+									"disabled": true
+								},
+								{
+									"key": "past",
+									"value": "true",
+									"description": "Get only past events",
+									"disabled": true
+								},
+								{
+									"key": "featured",
+									"value": "true",
+									"description": "Get only featured events",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "",
+									"description": "Filter by category",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Fetch all events for an organizer with optional filters and pagination. Supports filtering by status, search, upcoming/past, featured, and category."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Event",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{url_safe_organizer_id}}/events/{{event_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{url_safe_organizer_id}}",
+								"events",
+								"{{event_id}}"
+							]
+						},
+						"description": "Fetch a single event by ID (scoped to organizer). Set event_id variable or replace {{event_id}} with actual ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        // Note: Response is encrypted, decrypt first if needed",
+									"        // pm.environment.set(\"event_id\", response.data.id);",
+									"        console.log(\"Event created successfully\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Summer Music Festival\",\n  \"description\": \"Annual summer music festival with multiple artists\",\n  \"short_description\": \"Join us for an amazing music experience\",\n  \"start_date\": \"2024-07-15 18:00:00\",\n  \"end_date\": \"2024-07-15 23:00:00\",\n  \"category\": \"Music\",\n  \"genre\": \"Rock\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"country\": \"USA\",\n  \"address\": \"123 Main St, New York, NY 10001\",\n  \"status\": \"draft\",\n  \"is_featured\": false,\n  \"ticket_available\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{url_safe_organizer_id}}/events",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{url_safe_organizer_id}}",
+								"events"
+							]
+						},
+						"description": "Create a new event for an organizer. Required fields: name, start_date, end_date. organizer_id comes from URL parameter, not body."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Event Name\",\n  \"status\": \"live\",\n  \"description\": \"Updated description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{url_safe_organizer_id}}/events/{{event_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{url_safe_organizer_id}}",
+								"events",
+								"{{event_id}}"
+							]
+						},
+						"description": "Update an existing event (scoped to organizer). Only include fields you want to update. Set event_id variable or replace {{event_id}} with actual ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Event",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{url_safe_organizer_id}}/events/{{event_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{url_safe_organizer_id}}",
+								"events",
+								"{{event_id}}"
+							]
+						},
+						"description": "Delete an event (scoped to organizer). Set event_id variable or replace {{event_id}} with actual ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Events by Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{url_safe_organizer_id}}/events/status/active",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{url_safe_organizer_id}}",
+								"events",
+								"status",
+								"active"
+							],
+							"variable": [
+								{
+									"key": "status",
+									"value": "active",
+									"description": "Status: active, live, draft, or cancelled"
+								}
+							]
+						},
+						"description": "Get events filtered by status. Replace 'active' in URL with: active, live, draft, or cancelled."
+					},
+					"response": []
+				}
+			],
+			"description": "Event management endpoints for CRUD operations and filtering"
+		},
+		{
+			"name": "Organizers",
+			"item": [
+				{
+					"name": "Get All Organizers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers?page={{page}}&per_page={{per_page}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}",
+									"description": "Page number (default: 1)"
+								},
+								{
+									"key": "per_page",
+									"value": "{{per_page}}",
+									"description": "Items per page (default: 20)"
+								},
+								{
+									"key": "is_active",
+									"value": "true",
+									"description": "Filter by active status",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search in name or email",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Fetch all organizers with optional filters and pagination. Supports filtering by is_active and search."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Organizer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{organizer_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{organizer_id}}"
+							]
+						},
+						"description": "Fetch a single organizer by ID. Set organizer_id variable or replace {{organizer_id}} with actual ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Organizer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        // Note: Response is encrypted, decrypt first if needed",
+									"        // pm.environment.set(\"organizer_id\", response.data.id);",
+									"        console.log(\"Organizer created successfully\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securepassword123\",\n  \"is_active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers"
+							]
+						},
+						"description": "Create a new organizer. Required fields: name, email, password. Password will be hashed automatically."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Organizer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Name\",\n  \"is_active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{organizer_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{organizer_id}}"
+							]
+						},
+						"description": "Update an existing organizer. Only include fields you want to update. Set organizer_id variable or replace {{organizer_id}} with actual ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Organizer",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/{{organizer_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"{{organizer_id}}"
+							]
+						},
+						"description": "Delete an organizer (soft delete - sets is_active = false). Set organizer_id variable or replace {{organizer_id}} with actual ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Login Organizer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        // Note: Response is encrypted, decrypt first if needed",
+									"        // pm.environment.set(\"organizer_id\", response.data.id);",
+									"        console.log(\"Login successful\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securepassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/organizers/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"organizers",
+								"login"
+							]
+						},
+						"description": "Login organizer with email and password. Returns organizer data (without password). Use /auth/token endpoint to generate access tokens after login."
+					},
+					"response": []
+				}
+			],
+			"description": "Organizer CRUD operations and authentication"
+		},
+		{
+			"name": "Examples",
+			"item": [
+				{
+					"name": "Get All Examples",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/example",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"example"
+							]
+						},
+						"description": "Get all example items"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Example",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/example/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"example",
+								"1"
+							]
+						},
+						"description": "Get a single example item by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Example",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-TOKEN",
+								"value": "{{api_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Example Item\",\n  \"description\": \"This is an example\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/{{api_version}}/example",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"example"
+							]
+						},
+						"description": "Create a new example item"
+					},
+					"response": []
+				}
+			],
+			"description": "Example endpoints for testing"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-add API token header if not present",
+					"if (!pm.request.headers.has('X-API-TOKEN') && pm.environment.get('api_token')) {",
+					"    pm.request.headers.add({",
+					"        key: 'X-API-TOKEN',",
+					"        value: pm.environment.get('api_token')",
+					"    });",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global test script",
+					"pm.test(\"Response time is less than 5000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+					"});",
+					"",
+					"// Check for encrypted response structure",
+					"if (pm.response.code >= 200 && pm.response.code < 300) {",
+					"    try {",
+					"        const jsonData = pm.response.json();",
+					"        if (jsonData.success !== undefined) {",
+					"            pm.test(\"Response has success field\", function () {",
+					"                pm.expect(jsonData).to.have.property('success');",
+					"            });",
+					"        }",
+					"    } catch (e) {",
+					"        // Response might not be JSON",
+					"    }",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://tikiti-organizer-api.videostech.cloud",
+			"type": "string"
+		},
+		{
+			"key": "api_version",
+			"value": "v1",
+			"type": "string"
+		}
+	]
+}

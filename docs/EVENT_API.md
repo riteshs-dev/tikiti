@@ -51,32 +51,32 @@ Fetch all events for an organizer with optional filters and pagination.
 ```bash
 # Get all events (with pagination)
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events"
 
 # Get upcoming events
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events?upcoming=true"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events?upcoming=true"
 
 # Search events
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events?search=music"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events?search=music"
 
 # Get events by status
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events?status=live"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events?status=live"
 
 # Get featured events with pagination
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events?featured=true&page=1&per_page=10"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events?featured=true&page=1&per_page=10"
 
 # Get events by category
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events?category=Music"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events?category=Music"
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `GET`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events?page=1&per_page=20`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events?page=1&per_page=20`
 - **Headers:**
   - `X-API-TOKEN: your_access_token`
 
@@ -147,12 +147,12 @@ Fetch a single event by ID (scoped to organizer).
 **Example Request:**
 ```bash
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/89"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/89"
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `GET`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/89`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/89`
 - **Headers:**
   - `X-API-TOKEN: your_access_token`
 
@@ -279,12 +279,12 @@ curl -X POST \
        "is_featured": true,
        "ticket_available": true
      }' \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events"
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `POST`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events`
 - **Headers:**
   - `X-API-TOKEN: your_access_token`
   - `Content-Type: application/json`
@@ -362,12 +362,12 @@ curl -X PUT \
        "is_featured": true,
        "name": "Updated Event Name"
      }' \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/89"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/89"
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `PUT`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/89`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/89`
 - **Headers:**
   - `X-API-TOKEN: your_access_token`
   - `Content-Type: application/json`
@@ -416,12 +416,12 @@ Delete an event (soft delete using deleted_at, scoped to organizer).
 ```bash
 curl -X DELETE \
      -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/89"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/89"
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `DELETE`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/89`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/89`
 - **Headers:**
   - `X-API-TOKEN: your_access_token`
 
@@ -461,12 +461,12 @@ Get all events with a specific status (scoped to organizer).
 **Example Request:**
 ```bash
 curl -H "X-API-TOKEN: your_access_token" \
-     "http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/status/live"
+     "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/status/live"
 ```
 
 **Postman/HTTP Request:**
 - **Method:** `GET`
-- **URL:** `http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events/status/live`
+- **URL:** `https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events/status/live`
 - **Headers:**
   - `X-API-TOKEN: your_access_token`
 
@@ -509,7 +509,7 @@ curl -H "X-API-TOKEN: your_access_token" \
 TOKEN_RESPONSE=$(curl -s -X POST \
   -H "Content-Type: application/json" \
   -d '{"organizer_id": 1}' \
-  http://localhost/tikiti-organizer-api/public/api/v1/auth/token)
+  https://tikiti-organizer-api.videostech.cloud/api/v1/auth/token)
 
 # Extract values (using jq or manual parsing)
 ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
@@ -529,21 +529,21 @@ curl -X POST \
     "category": "Music",
     "status": "active"
   }' \
-  "http://localhost/tikiti-organizer-api/public/api/v1/organizers/$URL_SAFE_ORG_ID/events"
+  "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/$URL_SAFE_ORG_ID/events"
 ```
 
 ### Step 3: Get All Events
 
 ```bash
 curl -H "X-API-TOKEN: $ACCESS_TOKEN" \
-  "http://localhost/tikiti-organizer-api/public/api/v1/organizers/$URL_SAFE_ORG_ID/events"
+  "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/$URL_SAFE_ORG_ID/events"
 ```
 
 ### Step 4: Get Single Event
 
 ```bash
 curl -H "X-API-TOKEN: $ACCESS_TOKEN" \
-  "http://localhost/tikiti-organizer-api/public/api/v1/organizers/$URL_SAFE_ORG_ID/events/1"
+  "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/$URL_SAFE_ORG_ID/events/1"
 ```
 
 ### Step 5: Update Event
@@ -556,7 +556,7 @@ curl -X PUT \
     "status": "live",
     "is_featured": true
   }' \
-  "http://localhost/tikiti-organizer-api/public/api/v1/organizers/$URL_SAFE_ORG_ID/events/1"
+  "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/$URL_SAFE_ORG_ID/events/1"
 ```
 
 ### Step 6: Delete Event
@@ -564,7 +564,7 @@ curl -X PUT \
 ```bash
 curl -X DELETE \
   -H "X-API-TOKEN: $ACCESS_TOKEN" \
-  "http://localhost/tikiti-organizer-api/public/api/v1/organizers/$URL_SAFE_ORG_ID/events/1"
+  "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/$URL_SAFE_ORG_ID/events/1"
 ```
 
 ---

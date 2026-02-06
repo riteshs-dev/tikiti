@@ -1,5 +1,7 @@
 # Quick API Guide - Common Issues & Solutions
 
+**Base URL:** `https://tikiti-organizer-api.videostech.cloud`
+
 ## Issue: 401 Unauthorized Error
 
 ### Common Causes:
@@ -19,7 +21,7 @@
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"organizer_id": 1}' \
-  http://localhost/tikiti-organizer-api/public/api/v1/auth/token
+  https://tikiti-organizer-api.videostech.cloud/api/v1/auth/token
 ```
 
 **Response (encrypted):**
@@ -51,7 +53,7 @@ ACCESS_TOKEN="a1b2c3d4e5f6..."  # The actual access_token value (64 hex chars)
 URL_SAFE_ORG_ID="WmQYYFynQagwx5WWk544B2lBeUdVd21tWDBSMVFoZjdxMElRKzM1MHl6cVJERUcvdE8vQ0czSkVDaDQ9"
 
 # Correct curl command
-curl --location 'http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events' \
+curl --location 'https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events' \
   --header 'X-API-TOKEN: your_access_token_here'
 ```
 
@@ -74,13 +76,13 @@ curl --location 'http://localhost/tikiti-organizer-api/public/api/v1/organizers/
 TOKEN_RESPONSE=$(curl -s -X POST \
   -H "Content-Type: application/json" \
   -d '{"organizer_id": 1}' \
-  http://localhost/tikiti-organizer-api/public/api/v1/auth/token)
+  https://tikiti-organizer-api.videostech.cloud/api/v1/auth/token)
 
 # Decrypt to get actual values
 DECRYPTED=$(curl -s -X POST \
   -H "Content-Type: application/json" \
   -d "{\"encrypted_data\": $(echo $TOKEN_RESPONSE | grep -o '"data":"[^"]*' | cut -d'"' -f4)}" \
-  http://localhost/tikiti-organizer-api/public/api/v1/auth/decrypt)
+  https://tikiti-organizer-api.videostech.cloud/api/v1/auth/decrypt)
 
 # Extract values (if you have jq)
 ACCESS_TOKEN=$(echo $DECRYPTED | jq -r '.data.access_token')
@@ -91,7 +93,7 @@ URL_SAFE_ORG_ID=$(echo $DECRYPTED | jq -r '.data.url_safe_organizer_id')
 
 ```bash
 # Get all events
-curl --location "http://localhost/tikiti-organizer-api/public/api/v1/organizers/$URL_SAFE_ORG_ID/events" \
+curl --location "https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/$URL_SAFE_ORG_ID/events" \
   --header "X-API-TOKEN: $ACCESS_TOKEN"
 ```
 
@@ -125,23 +127,23 @@ curl -H "Authorization: your_token" ...
 
 ### ❌ Wrong: Missing organizer_id in URL
 ```bash
-curl http://localhost/tikiti-organizer-api/public/api/v1/events
+curl https://tikiti-organizer-api.videostech.cloud/api/v1/events
 ```
 
 ### ✅ Correct: Include organizer_id in URL
 ```bash
 curl -H "X-API-TOKEN: token" \
-  http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events
+  https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events
 ```
 
 ### ❌ Wrong: Double slash in URL
 ```bash
-curl http://localhost/tikiti-organizer-api/public//api/v1/events
+curl https://tikiti-organizer-api.videostech.cloud//api/v1/events
 ```
 
 ### ✅ Correct: Single slash
 ```bash
-curl http://localhost/tikiti-organizer-api/public/api/v1/events
+curl https://tikiti-organizer-api.videostech.cloud/api/v1/events
 ```
 
 ### ❌ Wrong: Using encrypted response as token
@@ -168,7 +170,7 @@ curl -H "X-API-TOKEN: a1b2c3d4e5f6..."  # Actual access_token value
    curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"organizer_id": 1}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/token
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/token
    ```
 
 2. **Decrypt the response to get actual token:**
@@ -176,7 +178,7 @@ curl -H "X-API-TOKEN: a1b2c3d4e5f6..."  # Actual access_token value
    curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"encrypted_data": "encrypted_string_from_above"}' \
-     http://localhost/tikiti-organizer-api/public/api/v1/auth/decrypt
+     https://tikiti-organizer-api.videostech.cloud/api/v1/auth/decrypt
    ```
 
 3. **Use the access_token from decrypted response:**
@@ -189,7 +191,7 @@ curl -H "X-API-TOKEN: a1b2c3d4e5f6..."  # Actual access_token value
 
 5. **Check URL format:**
    - No double slashes
-   - Correct base path: `http://localhost/tikiti-organizer-api/public`
+   - Correct base path: `https://tikiti-organizer-api.videostech.cloud`
 
 ---
 
@@ -200,7 +202,7 @@ curl -H "X-API-TOKEN: a1b2c3d4e5f6..."  # Actual access_token value
 
 # Configuration
 ORGANIZER_ID=1
-BASE_URL="http://localhost/tikiti-organizer-api/public"
+BASE_URL="https://tikiti-organizer-api.videostech.cloud"
 
 # Step 1: Generate token
 echo "Step 1: Generating token..."
@@ -239,7 +241,7 @@ echo "..."
 
 **Correct API Call Format:**
 ```bash
-curl --location 'http://localhost/tikiti-organizer-api/public/api/v1/organizers/{url_safe_organizer_id}/events' \
+curl --location 'https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events' \
   --header 'X-API-TOKEN: {access_token_from_decrypted_response}'
 ```
 
@@ -247,5 +249,35 @@ curl --location 'http://localhost/tikiti-organizer-api/public/api/v1/organizers/
 1. ✅ Route includes `organizers/{organizer_id}/events`
 2. ✅ Use `url_safe_organizer_id` from token generation response
 3. ✅ Use `access_token` from decrypted token response (not the encrypted data string)
+4. ✅ Base URL: `https://tikiti-organizer-api.videostech.cloud`
+
+---
+
+## Organizer Endpoints
+
+### Create Organizer
+```bash
+curl -X POST \
+  -H "X-API-TOKEN: your_api_token" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John Doe", "email": "john@example.com", "password": "secure123"}' \
+  https://tikiti-organizer-api.videostech.cloud/api/v1/organizers
+```
+
+### Login Organizer
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"email": "john@example.com", "password": "secure123"}' \
+  https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/login
+```
+
+### Get All Organizers
+```bash
+curl -H "X-API-TOKEN: your_api_token" \
+  https://tikiti-organizer-api.videostech.cloud/api/v1/organizers
+```
+
+See [ORGANIZER_API.md](./ORGANIZER_API.md) for complete organizer API documentation.
 4. ✅ Header: `X-API-TOKEN` (or `Authorization`, `X-API-KEY`, etc.)
 5. ✅ No double slashes in URL

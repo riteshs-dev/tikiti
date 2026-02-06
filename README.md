@@ -51,7 +51,7 @@ A modular, scalable PHP API for the Tikiti Organizer Angular application with Po
    ENCRYPTION_METHOD=AES-256-CBC
    
    API_VERSION=v1
-   API_BASE_URL=http://localhost:8000
+   API_BASE_URL=https://tikiti-organizer-api.videostech.cloud
    API_TOKEN=your_secure_api_token_here
    API_AUTH_BYPASS_ROUTES=/health
    

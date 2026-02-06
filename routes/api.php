@@ -7,6 +7,7 @@ use App\Controllers\HealthController;
 use App\Controllers\ExampleController;
 use App\Controllers\EventController;
 use App\Controllers\AuthController;
+use App\Controllers\OrganizerController;
 
 // Ensure classes are loaded
 if (!class_exists(EventController::class)) {
@@ -51,6 +52,12 @@ $router->put("{$apiPrefix}/organizers/{organizer_id}/events/{id}", EventControll
 $router->delete("{$apiPrefix}/organizers/{organizer_id}/events/{id}", EventController::class . '@delete');
 $router->get("{$apiPrefix}/organizers/{organizer_id}/events/status/{status}", EventController::class . '@getByStatus');
 
-
+// Organizer CRUD routes (organizers table only)
+$router->get("{$apiPrefix}/organizers", OrganizerController::class . '@index');
+$router->get("{$apiPrefix}/organizers/{id}", OrganizerController::class . '@show');
+$router->post("{$apiPrefix}/organizers", OrganizerController::class . '@create');
+$router->put("{$apiPrefix}/organizers/{id}", OrganizerController::class . '@update');
+$router->delete("{$apiPrefix}/organizers/{id}", OrganizerController::class . '@delete');
+$router->post("{$apiPrefix}/organizers/login", OrganizerController::class . '@login');
 
 // Add your routes here

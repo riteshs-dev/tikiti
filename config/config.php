@@ -15,27 +15,15 @@ class Config {
                 }
             }
             
-            // self::$config = [
-            //     'db' => [
-            //         'host' => $_ENV['DB_HOST'] ?? '20.40.45.193',
-            //         'port' => $_ENV['DB_PORT'] ?? '5432',
-            //         'name' => $_ENV['DB_NAME'] ?? 'belive_events',
-            //         'user' => $_ENV['DB_USER'] ?? 'belive_events',
-            //         'password' => $_ENV['DB_PASSWORD'] ?? $_ENV['DB_PASS'] ?? 'belive$events@123',
-            //         'pool_size' => (int)($_ENV['DB_POOL_SIZE'] ?? 10)
-            //     ],
-
-                self::$config = [
-                    'db' => [
-                        'host' => $_ENV['DB_HOST'] ?? '20.40.45.193',
-                        'port' => $_ENV['DB_PORT'] ?? '5432',
-                        'name' => $_ENV['DB_NAME'] ?? 'tikiti_db',
-                        'user' => $_ENV['DB_USER'] ?? 'tikiti',
-                        'password' => $_ENV['DB_PASSWORD'] ?? $_ENV['DB_PASS'] ?? 'hafse%sean@123',
-                        'pool_size' => (int) ($_ENV['DB_POOL_SIZE'] ?? 10),
-                    ],
-                
-
+            self::$config = [
+                'db' => [
+                    'host' => $_ENV['DB_HOST'] ?? '20.40.45.193',
+                    'port' => $_ENV['DB_PORT'] ?? '5432',
+                    'name' => $_ENV['DB_NAME'] ?? 'tikiti_db',
+                    'user' => $_ENV['DB_USER'] ?? 'tikiti',
+                    'password' => $_ENV['DB_PASSWORD'] ?? $_ENV['DB_PASS'] ?? 'hafse%sean@123',
+                    'pool_size' => (int) ($_ENV['DB_POOL_SIZE'] ?? 10),
+                ],
                 'encryption' => [
                     'key' => $_ENV['ENCRYPTION_KEY'] ?? '',
                     'method' => $_ENV['ENCRYPTION_METHOD'] ?? 'AES-256-CBC'

@@ -31,21 +31,21 @@ API_AUTH_BYPASS_ROUTES=/health,/api/v1/health
 ```bash
 # With X-API-TOKEN header (recommended)
 curl -H "X-API-TOKEN: your_secure_token_here" \
-     http://localhost/tikiti-organizer-api/public/api/v1/events
+     https://tikiti-organizer-api.videostech.cloud/api/v1/events
 
 # With Authorization header
 curl -H "Authorization: Bearer your_secure_token_here" \
-     http://localhost/tikiti-organizer-api/public/api/v1/events
+     https://tikiti-organizer-api.videostech.cloud/api/v1/events
 
 # With X-API-KEY header
 curl -H "X-API-KEY: your_secure_token_here" \
-     http://localhost/tikiti-organizer-api/public/api/v1/events
+     https://tikiti-organizer-api.videostech.cloud/api/v1/events
 ```
 
 ### Using JavaScript/Fetch
 
 ```javascript
-fetch('http://localhost/tikiti-organizer-api/public/api/v1/events', {
+fetch('https://tikiti-organizer-api.videostech.cloud/api/v1/events', {
   headers: {
     'X-API-TOKEN': 'your_secure_token_here',
     'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ const headers = new HttpHeaders({
   'X-API-TOKEN': 'your_secure_token_here'
 });
 
-this.http.get('http://localhost/tikiti-organizer-api/public/api/v1/events', { headers })
+this.http.get('https://tikiti-organizer-api.videostech.cloud/api/v1/events', { headers })
   .subscribe(data => console.log(data));
 ```
 
@@ -177,12 +177,12 @@ Test authentication:
 
 ```bash
 # Without token (should fail)
-curl http://localhost/tikiti-organizer-api/public/api/v1/events
+curl https://tikiti-organizer-api.videostech.cloud/api/v1/events
 
 # With token (should succeed)
 curl -H "X-API-TOKEN: your_token" \
-     http://localhost/tikiti-organizer-api/public/api/v1/events
+     https://tikiti-organizer-api.videostech.cloud/api/v1/events
 
 # Health check (should work without token)
-curl http://localhost/tikiti-organizer-api/public/health
+curl https://tikiti-organizer-api.videostech.cloud/health
 ```
