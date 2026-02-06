@@ -164,7 +164,8 @@ class AuthMiddleware {
             '/api/v1/auth/token',
             '/api/v1/auth/refresh',
             '/api/v1/auth/organizer-id',
-            '/api/v1/auth/decrypt'
+            '/api/v1/auth/decrypt',
+            '/api/v1/organizers/login' 
         ];
         
         $allBypass = array_merge($defaultBypass, $authBypass, $bypassRoutes);

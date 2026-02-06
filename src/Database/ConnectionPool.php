@@ -35,12 +35,14 @@ class ConnectionPool {
         if (!empty($this->pool)) {
             $connection = array_pop($this->pool);
             try {
-                // Test if connection is still alive
+                // Test if connection is still alive (with timeout)
+                $connection->setAttribute(PDO::ATTR_TIMEOUT, 2);
                 $connection->query('SELECT 1');
                 $this->activeConnections++;
                 return $connection;
             } catch (PDOException $e) {
                 // Connection is dead, create a new one
+                $connection = null;
             }
         }
         
@@ -51,7 +53,7 @@ class ConnectionPool {
             return $connection;
         }
         
-        // Pool is full, wait and retry or create temporary connection
+        // Pool is full, create temporary connection
         return $this->createConnection();
     }
     
@@ -77,8 +79,9 @@ class ConnectionPool {
      */
     private function createConnection() {
         try {
+            // Add connection timeout to DSN
             $dsn = sprintf(
-                "pgsql:host=%s;port=%d;dbname=%s",
+                "pgsql:host=%s;port=%d;dbname=%s;connect_timeout=5",
                 $this->config['host'],
                 $this->config['port'],
                 $this->config['name']
@@ -88,9 +91,16 @@ class ConnectionPool {
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_PERSISTENT => true, // Enable persistent connections
+                PDO::ATTR_PERSISTENT => false, // Disable persistent connections to avoid timeout issues
                 PDO::ATTR_TIMEOUT => 5
             ];
+            
+            // Set a timeout for the connection attempt
+            $context = stream_context_create([
+                'socket' => [
+                    'connect_timeout' => 5
+                ]
+            ]);
             
             $pdo = new PDO(
                 $dsn,

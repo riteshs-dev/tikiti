@@ -290,8 +290,11 @@ class OrganizerController extends BaseController {
                 ]);
             }
             
+            // Normalize email to lowercase
+            $email = strtolower(trim($body['email']));
+            
             // Find organizer by email
-            $organizer = $this->organizerModel->findByEmail($body['email']);
+            $organizer = $this->organizerModel->findByEmail($email);
             
             if (!$organizer) {
                 return $this->sendUnauthorized("Invalid email or password");

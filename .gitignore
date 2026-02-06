@@ -1,5 +1,7 @@
 /vendor/
 .env
+public/.htaccess
+public/.htaccess_bkp
 .idea/
 .vscode/
 *.log

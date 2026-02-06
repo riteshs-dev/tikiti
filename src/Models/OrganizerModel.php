@@ -16,9 +16,12 @@ class OrganizerModel extends BaseModel {
      */
     public function findByEmail($email) {
         return $this->dbPool->execute(function(PDO $db) use ($email) {
-            $stmt = $db->prepare("SELECT * FROM {$this->table} WHERE email = :email AND is_active = TRUE");
-            $stmt->execute(['email' => $email]);
-            return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+            // Normalize email to lowercase for case-insensitive comparison
+            $normalizedEmail = strtolower(trim($email));
+            $stmt = $db->prepare("SELECT * FROM {$this->table} WHERE LOWER(email) = LOWER(:email) AND is_active = true");
+            $stmt->execute(['email' => $normalizedEmail]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ?: null;
         });
     }
     
@@ -29,9 +32,12 @@ class OrganizerModel extends BaseModel {
      */
     public function findByEmailIncludingInactive($email) {
         return $this->dbPool->execute(function(PDO $db) use ($email) {
-            $stmt = $db->prepare("SELECT * FROM {$this->table} WHERE email = :email");
-            $stmt->execute(['email' => $email]);
-            return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+            // Normalize email to lowercase for case-insensitive comparison
+            $normalizedEmail = strtolower(trim($email));
+            $stmt = $db->prepare("SELECT * FROM {$this->table} WHERE LOWER(email) = LOWER(:email)");
+            $stmt->execute(['email' => $normalizedEmail]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ?: null;
         });
     }
     
