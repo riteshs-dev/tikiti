@@ -92,6 +92,7 @@ When decrypted, the error data structure is:
 | Code | Status | Description |
 |------|--------|-------------|
 | `NOT_FOUND` | 404 | Resource not found |
+| `ROUTE_NOT_FOUND` | 404 | Route not found (invalid endpoint path) |
 | `EVENT_NOT_FOUND` | 404 | Event not found |
 | `CONFLICT` | 409 | Resource conflict |
 
@@ -156,9 +157,28 @@ curl http://localhost/api/v1/events
 curl -H "X-API-TOKEN: your_token" \
      http://localhost/api/v1/events/invalid
 
-# 404 - Not found
+# 404 - Not found (resource)
 curl -H "X-API-TOKEN: your_token" \
      http://localhost/api/v1/events/99999
+
+# 404 - Route not found (invalid endpoint)
+curl https://tikiti-organizer-api.videostech.cloud/api/v1/invalid-route
+
+# Response includes available routes and suggestions:
+# {
+#   "success": false,
+#   "error": "Route not found",
+#   "message": "The requested route 'GET /api/v1/invalid-route' was not found on this server.",
+#   "request": {
+#     "method": "GET",
+#     "path": "/api/v1/invalid-route"
+#   },
+#   "status_code": 404,
+#   "code": "ROUTE_NOT_FOUND",
+#   "available_routes": ["GET /health", "GET /api/v1/organizers", ...],
+#   "suggestion": "Check available routes above or visit / for API information",
+#   "timestamp": 1234567890
+# }
 
 # 422 - Validation error
 curl -X POST \

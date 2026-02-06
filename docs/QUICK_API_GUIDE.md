@@ -2,6 +2,70 @@
 
 **Base URL:** `https://tikiti-organizer-api.videostech.cloud`
 
+## API Discovery
+
+The root endpoint provides information about all available API endpoints:
+
+```bash
+curl https://tikiti-organizer-api.videostech.cloud/
+```
+
+**Response:**
+```json
+{
+  "name": "Tikiti Organizer API",
+  "version": "v1",
+  "base_url": "https://tikiti-organizer-api.videostech.cloud",
+  "endpoints": {
+    "health": "/health",
+    "auth": { ... },
+    "organizers": { ... },
+    "events": { ... }
+  },
+  "documentation": "See API documentation for details",
+  "timestamp": 1234567890
+}
+```
+
+This endpoint doesn't require authentication and helps you discover all available routes.
+
+---
+
+## Issue: 404 Route Not Found
+
+### What You'll See
+
+When accessing a non-existent route, you'll receive a structured error response:
+
+```json
+{
+  "success": false,
+  "error": "Route not found",
+  "message": "The requested route 'GET /api/v1/invalid-route' was not found on this server.",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/invalid-route"
+  },
+  "status_code": 404,
+  "code": "ROUTE_NOT_FOUND",
+  "available_routes": [
+    "GET /health",
+    "GET /api/v1/organizers",
+    ...
+  ],
+  "suggestion": "Check available routes above or visit / for API information",
+  "timestamp": 1234567890
+}
+```
+
+### Solutions
+
+1. **Check the route**: Visit `/` to see all available endpoints
+2. **Verify the method**: Ensure you're using the correct HTTP method (GET, POST, PUT, DELETE)
+3. **Check URL format**: Ensure no typos or extra slashes
+
+---
+
 ## Issue: 401 Unauthorized Error
 
 ### Common Causes:
@@ -279,5 +343,34 @@ curl -H "X-API-TOKEN: your_api_token" \
 ```
 
 See [ORGANIZER_API.md](./ORGANIZER_API.md) for complete organizer API documentation.
-4. ✅ Header: `X-API-TOKEN` (or `Authorization`, `X-API-KEY`, etc.)
-5. ✅ No double slashes in URL
+
+---
+
+## API Discovery Endpoint
+
+Visit the root URL to discover all available endpoints:
+
+```bash
+curl https://tikiti-organizer-api.videostech.cloud/
+```
+
+This returns a JSON object listing all available routes, grouped by category (auth, organizers, events). No authentication required.
+
+---
+
+## Summary
+
+**Correct API Call Format:**
+```bash
+curl --location 'https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{url_safe_organizer_id}/events' \
+  --header 'X-API-TOKEN: {access_token_from_decrypted_response}'
+```
+
+**Key Points:**
+1. ✅ Route includes `organizers/{organizer_id}/events`
+2. ✅ Use `url_safe_organizer_id` from token generation response
+3. ✅ Use `access_token` from decrypted token response (not the encrypted data string)
+4. ✅ Base URL: `https://tikiti-organizer-api.videostech.cloud`
+5. ✅ Header: `X-API-TOKEN` (or `Authorization`, `X-API-KEY`, etc.)
+6. ✅ No double slashes in URL
+7. ✅ Visit `/` for API discovery and route information

@@ -2,6 +2,10 @@
 
 This document describes the authentication endpoints for the Tikiti Organizer API.
 
+**Base URL:** `https://tikiti-organizer-api.videostech.cloud`
+
+**API Discovery:** Visit `GET /` to see all available endpoints and their routes. No authentication required.
+
 ## Table of Contents
 
 1. [Token Generation](#token-generation)

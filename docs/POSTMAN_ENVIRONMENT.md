@@ -230,7 +230,53 @@ In JSON request bodies:
 
 ## Example Requests
 
-### 1. Health Check (No Auth Required)
+### 1. API Discovery - Root Endpoint (No Auth Required)
+
+**Method:** `GET`  
+**URL:** `{{base_url}}/`  
+**Headers:** None required
+
+**Description:** Returns information about all available API endpoints, grouped by category. This is useful for discovering available routes.
+
+**Response Example:**
+```json
+{
+  "name": "Tikiti Organizer API",
+  "version": "v1",
+  "base_url": "https://tikiti-organizer-api.videostech.cloud",
+  "endpoints": {
+    "health": "/health",
+    "auth": {
+      "token": "/api/v1/auth/token",
+      "refresh": "/api/v1/auth/refresh",
+      "organizer_id": "/api/v1/auth/organizer-id",
+      "decrypt": "/api/v1/auth/decrypt"
+    },
+    "organizers": {
+      "list": "/api/v1/organizers",
+      "get": "/api/v1/organizers/{id}",
+      "create": "/api/v1/organizers",
+      "update": "/api/v1/organizers/{id}",
+      "delete": "/api/v1/organizers/{id}",
+      "login": "/api/v1/organizers/login"
+    },
+    "events": {
+      "list": "/api/v1/organizers/{organizer_id}/events",
+      "get": "/api/v1/organizers/{organizer_id}/events/{id}",
+      "create": "/api/v1/organizers/{organizer_id}/events",
+      "update": "/api/v1/organizers/{organizer_id}/events/{id}",
+      "delete": "/api/v1/organizers/{organizer_id}/events/{id}",
+      "by_status": "/api/v1/organizers/{organizer_id}/events/status/{status}"
+    }
+  },
+  "documentation": "See API documentation for details",
+  "timestamp": 1234567890
+}
+```
+
+---
+
+### 2. Health Check (No Auth Required)
 
 **Method:** `GET`  
 **URL:** `{{base_url}}/health`  
@@ -238,7 +284,7 @@ In JSON request bodies:
 
 ---
 
-### 2. Generate Token
+### 3. Generate Token
 
 **Method:** `POST`  
 **URL:** `{{base_url}}/api/{{api_version}}/auth/token`  
@@ -593,9 +639,39 @@ Or use a single environment and manually switch the `base_url` value.
 
 ### URL Not Found (404)
 
+When accessing a non-existent route, the API returns a structured error response:
+
+**Example 404 Response:**
+```json
+{
+  "success": false,
+  "error": "Route not found",
+  "message": "The requested route 'GET /api/v1/invalid-route' was not found on this server.",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/invalid-route"
+  },
+  "status_code": 404,
+  "code": "ROUTE_NOT_FOUND",
+  "available_routes": [
+    "GET /health",
+    "GET /api/v1/organizers",
+    "POST /api/v1/organizers",
+    ...
+  ],
+  "suggestion": "Check available routes above or visit / for API information",
+  "timestamp": 1234567890
+}
+```
+
+**Troubleshooting Steps:**
+
 1. **Check Base URL**: Verify `base_url` is correct for your server setup
 2. **Check API Version**: Ensure `api_version` matches your API version
 3. **Check Path**: Verify the endpoint path is correct
+4. **Visit Root Endpoint**: Use `GET {{base_url}}/` to see all available routes
+5. **Check HTTP Method**: Ensure you're using the correct method (GET, POST, PUT, DELETE)
+6. **Review Available Routes**: The 404 response includes a list of available routes for the requested method
 
 ### Response Encryption
 
@@ -632,8 +708,10 @@ A complete Postman collection with all API endpoints is available:
 
 ### Collection Structure
 
+- **API Discovery** - Root endpoint for discovering all available routes
 - **Health Check** - API health endpoint
 - **Authentication** - Token generation, refresh, organizer ID, decrypt
+- **Organizers** - Full CRUD operations and login for organizers
 - **Events** - Full CRUD operations and filtering
 - **Examples** - Example endpoints for testing
 

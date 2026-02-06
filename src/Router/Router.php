@@ -165,10 +165,37 @@ class Router {
             }
         }
         
-        // 404 Not Found
+        // 404 Not Found - Return structured API response
         http_response_code(404);
         header('Content-Type: application/json');
-        echo json_encode(['error' => 'Route not found']);
+        
+        // Get available routes for the requested method
+        $availableRoutes = [];
+        foreach ($this->routes as $route) {
+            if ($route['method'] === $method) {
+                $availableRoutes[] = $route['method'] . ' ' . $route['path'];
+            }
+        }
+        
+        // Build response
+        $response = [
+            'success' => false,
+            'error' => 'Route not found',
+            'message' => "The requested route '{$method} {$path}' was not found on this server.",
+            'request' => [
+                'method' => $method,
+                'path' => $path
+            ],
+            'status_code' => 404,
+            'code' => 'ROUTE_NOT_FOUND',
+            'available_routes' => !empty($availableRoutes) ? $availableRoutes : null,
+            'suggestion' => !empty($availableRoutes) 
+                ? 'Check available routes above or visit / for API information' 
+                : 'Visit / for API endpoint information',
+            'timestamp' => time()
+        ];
+        
+        echo json_encode($response, JSON_PRETTY_PRINT);
         exit;
     }
     

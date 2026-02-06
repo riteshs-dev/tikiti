@@ -8,6 +8,30 @@
 	},
 	"item": [
 		{
+			"name": "API Discovery",
+			"item": [
+				{
+					"name": "Root Endpoint - API Discovery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Get API discovery information including all available endpoints. Returns a JSON object with API name, version, base URL, and a complete list of all available routes grouped by category (health, auth, organizers, events). No authentication required."
+					},
+					"response": []
+				}
+			],
+			"description": "API discovery endpoint - returns information about all available routes"
+		},
+		{
 			"name": "Health Check",
 			"item": [
 				{

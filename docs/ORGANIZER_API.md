@@ -3,6 +3,8 @@
 ## Base URL
 `https://tikiti-organizer-api.videostech.cloud/api/v1/organizers`
 
+**API Discovery:** Visit `GET /` to see all available endpoints and their routes. No authentication required.
+
 **Important:** All organizer endpoints require:
 - **Authentication:** `X-API-TOKEN` header with valid access token (except login endpoint)
 

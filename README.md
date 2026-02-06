@@ -238,6 +238,92 @@ Test the health endpoint:
 curl http://localhost:8000/health
 ```
 
+Test the root endpoint (API discovery):
+```bash
+curl https://tikiti-organizer-api.videostech.cloud/
+```
+
+The root endpoint returns API information including available endpoints and doesn't require authentication.
+
+## API Discovery
+
+The root endpoint (`GET /`) provides API discovery information:
+
+**Request:**
+```bash
+curl https://tikiti-organizer-api.videostech.cloud/
+```
+
+**Response:**
+```json
+{
+  "name": "Tikiti Organizer API",
+  "version": "v1",
+  "base_url": "https://tikiti-organizer-api.videostech.cloud",
+  "endpoints": {
+    "health": "/health",
+    "auth": {
+      "token": "/api/v1/auth/token",
+      "refresh": "/api/v1/auth/refresh",
+      "organizer_id": "/api/v1/auth/organizer-id",
+      "decrypt": "/api/v1/auth/decrypt"
+    },
+    "organizers": {
+      "list": "/api/v1/organizers",
+      "get": "/api/v1/organizers/{id}",
+      "create": "/api/v1/organizers",
+      "update": "/api/v1/organizers/{id}",
+      "delete": "/api/v1/organizers/{id}",
+      "login": "/api/v1/organizers/login"
+    },
+    "events": {
+      "list": "/api/v1/organizers/{organizer_id}/events",
+      "get": "/api/v1/organizers/{organizer_id}/events/{id}",
+      "create": "/api/v1/organizers/{organizer_id}/events",
+      "update": "/api/v1/organizers/{organizer_id}/events/{id}",
+      "delete": "/api/v1/organizers/{organizer_id}/events/{id}",
+      "by_status": "/api/v1/organizers/{organizer_id}/events/status/{status}"
+    }
+  },
+  "documentation": "See API documentation for details",
+  "timestamp": 1234567890
+}
+```
+
+## Error Handling
+
+### 404 Not Found
+
+When accessing a non-existent route, the API returns a structured error response:
+
+**Example:**
+```bash
+curl https://tikiti-organizer-api.videostech.cloud/api/v1/invalid-route
+```
+
+**Response:**
+```json
+{
+  "success": false,
+  "error": "Route not found",
+  "message": "The requested route 'GET /api/v1/invalid-route' was not found on this server.",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/invalid-route"
+  },
+  "status_code": 404,
+  "code": "ROUTE_NOT_FOUND",
+  "available_routes": [
+    "GET /health",
+    "GET /api/v1/organizers",
+    "POST /api/v1/organizers",
+    ...
+  ],
+  "suggestion": "Check available routes above or visit / for API information",
+  "timestamp": 1234567890
+}
+```
+
 ## Authentication
 
 All API endpoints (except bypassed routes) require an API token in the request headers:
@@ -255,7 +341,7 @@ curl -H "X-API-TOKEN: your_token_here" \
      http://localhost:8000/api/v1/events
 ```
 
-**Bypass Routes:** Routes configured in `API_AUTH_BYPASS_ROUTES` (default: `/health`) don't require authentication.
+**Bypass Routes:** Routes configured in `API_AUTH_BYPASS_ROUTES` (default: `/,/health`) don't require authentication. The root endpoint (`/`) is included to allow API discovery without authentication.
 
 See [AUTHENTICATION.md](docs/AUTHENTICATION.md) for detailed documentation.
 

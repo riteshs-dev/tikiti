@@ -1,7 +1,9 @@
 # Event API Documentation
 
 ## Base URL
-`/api/v1/organizers/{organizer_id}/events`
+`https://tikiti-organizer-api.videostech.cloud/api/v1/organizers/{organizer_id}/events`
+
+**API Discovery:** Visit `GET /` to see all available endpoints and their routes. No authentication required.
 
 **Important:** All event endpoints require:
 - **Authentication:** `X-API-TOKEN` header with valid access token

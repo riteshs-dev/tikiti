@@ -26,6 +26,45 @@ $router->middleware(function($path = null) {
     AuthMiddleware::handle(['path' => $path ?? '']);
 });
 
+// Root endpoint - API information (no auth required, unencrypted)
+$router->get('/', function() {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'name' => 'Tikiti Organizer API',
+        'version' => \Config::get('api.version') ?? 'v1',
+        'base_url' => 'https://tikiti-organizer-api.videostech.cloud',
+        'endpoints' => [
+            'health' => '/health',
+            'auth' => [
+                'token' => '/api/v1/auth/token',
+                'refresh' => '/api/v1/auth/refresh',
+                'organizer_id' => '/api/v1/auth/organizer-id',
+                'decrypt' => '/api/v1/auth/decrypt'
+            ],
+            'organizers' => [
+                'list' => '/api/v1/organizers',
+                'get' => '/api/v1/organizers/{id}',
+                'create' => '/api/v1/organizers',
+                'update' => '/api/v1/organizers/{id}',
+                'delete' => '/api/v1/organizers/{id}',
+                'login' => '/api/v1/organizers/login'
+            ],
+            'events' => [
+                'list' => '/api/v1/organizers/{organizer_id}/events',
+                'get' => '/api/v1/organizers/{organizer_id}/events/{id}',
+                'create' => '/api/v1/organizers/{organizer_id}/events',
+                'update' => '/api/v1/organizers/{organizer_id}/events/{id}',
+                'delete' => '/api/v1/organizers/{organizer_id}/events/{id}',
+                'by_status' => '/api/v1/organizers/{organizer_id}/events/status/{status}'
+            ]
+        ],
+        'documentation' => 'See API documentation for details',
+        'timestamp' => time()
+    ], JSON_PRETTY_PRINT);
+    exit;
+});
+
+
 // Health check
 $router->get('/health', HealthController::class . '@check');
 
@@ -40,9 +79,9 @@ $router->post("{$apiPrefix}/auth/organizer-id", AuthController::class . '@getEnc
 $router->post("{$apiPrefix}/auth/decrypt", AuthController::class . '@decrypt'); // Add this line
 
 // Example routes
-$router->get("{$apiPrefix}/example", ExampleController::class . '@index');
-$router->get("{$apiPrefix}/example/{id}", ExampleController::class . '@show');
-$router->post("{$apiPrefix}/example", ExampleController::class . '@create');
+// $router->get("{$apiPrefix}/example", ExampleController::class . '@index');
+// $router->get("{$apiPrefix}/example/{id}", ExampleController::class . '@show');
+// $router->post("{$apiPrefix}/example", ExampleController::class . '@create');
 
 // Event routes (with organizer_id in URL for caching)
 $router->get("{$apiPrefix}/organizers/{organizer_id}/events", EventController::class . '@index');
