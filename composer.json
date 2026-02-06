@@ -1,0 +1,19 @@
+{
+    "name": "tikiti/organizer-api",
+    "description": "PHP API for Tikiti Organizer Angular Application",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "ext-pdo": "*",
+        "ext-pdo_pgsql": "*",
+        "ext-openssl": "*",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
