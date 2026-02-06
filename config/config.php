@@ -25,7 +25,7 @@ class Config {
             //         'pool_size' => (int)($_ENV['DB_POOL_SIZE'] ?? 10)
             //     ],
 
-                            self::$config = [
+                self::$config = [
                     'db' => [
                         'host' => $_ENV['DB_HOST'] ?? '20.40.45.193',
                         'port' => $_ENV['DB_PORT'] ?? '5432',
