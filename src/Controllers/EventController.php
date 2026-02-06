@@ -59,9 +59,19 @@ class EventController extends BaseController {
                 $total = count($events);
                 $events = array_slice($events, $offset, $perPage);
             } elseif ($search) {
-                $events = $this->eventModel->searchEvents($search, $organizerId);
-                $total = count($events);
-                $events = array_slice($events, $offset, $perPage);
+                // Validate search term is not empty
+                $search = trim($search);
+                if (empty($search)) {
+                    return $this->sendValidationError('Search term cannot be empty', ['search' => 'Search parameter is required']);
+                }
+                try {
+                    $events = $this->eventModel->searchEvents($search, $organizerId);
+                    $total = count($events);
+                    $events = array_slice($events, $offset, $perPage);
+                } catch (\Exception $e) {
+                    error_log("Search error: " . $e->getMessage());
+                    return $this->sendError('Search failed: ' . $e->getMessage(), HttpStatus::BAD_REQUEST, [], 'SEARCH_ERROR');
+                }
             } elseif ($category) {
                 $events = $this->eventModel->getEventsByCategory($category, $organizerId);
                 $total = count($events);
@@ -87,6 +97,7 @@ class EventController extends BaseController {
             $this->sendSuccess($response);
             
         } catch (\Exception $e) {
+            error_log("Event fetch error: " . $e->getMessage());
             $this->sendServerError('Failed to fetch events: ' . $e->getMessage());
         }
     }

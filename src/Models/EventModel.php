@@ -131,7 +131,7 @@ class EventModel extends BaseModel {
     public function searchEvents($searchTerm, $organizerId) {
         return $this->query(
             "SELECT * FROM {$this->table} 
-             WHERE (name ILIKE :search OR description ILIKE :search OR short_description ILIKE :search)
+             WHERE (name ILIKE :search OR description ILIKE :search)
              AND organizer_id = :organizer_id
              AND (deleted_at IS NULL OR deleted_at > CURRENT_TIMESTAMP)
              ORDER BY created_at DESC",
